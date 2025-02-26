@@ -11,7 +11,7 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative">
-        <div className="container mx-auto flex flex-col items-center gap-4 py-24 text-center md:py-32">
+        <div className="container flex flex-col items-center gap-4 py-24 text-center md:py-32">
           <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-6xl lg:leading-[1.1]">
             Modernizing Barangay Management
           </h1>
@@ -32,7 +32,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto py-16 md:py-24">
+      <section className="container py-16 md:py-24">
         <h2 className="mb-12 text-center text-3xl font-bold">Key Features</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
@@ -49,7 +49,7 @@ export default function HomePage() {
 
       {/* Statistics Section */}
       <section className="border-t bg-muted/50">
-        <div className="container mx-auto py-16 md:py-24">
+        <div className="container py-16 md:py-24">
           <h2 className="mb-12 text-center text-3xl font-bold">Trusted by Barangays</h2>
           <div className="grid gap-8 md:grid-cols-4">
             {stats.map((stat, index) => (
@@ -63,7 +63,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="container mx-auto py-16 md:py-24">
+      <section className="container py-16 md:py-24">
         <h2 className="mb-12 text-center text-3xl font-bold">How It Works</h2>
         <div className="grid gap-8 md:grid-cols-3">
           {steps.map((step, index) => (
@@ -80,7 +80,7 @@ export default function HomePage() {
 
       {/* CTA Section */}
       <section className="border-t bg-muted/50">
-        <div className="container mx-auto py-16 md:py-24">
+        <div className="container py-16 md:py-24">
           <div className="flex flex-col items-center gap-6 text-center">
             <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
             <p className="max-w-[600px] text-muted-foreground">
