@@ -33,10 +33,7 @@ export function Sidebar() {
     <div className="flex h-screen w-64 flex-col border-r bg-background">
       <div className="p-6">
         <div className="flex items-center gap-2 font-semibold">
-        <a href="/home">
-  <Home className="h-6 w-6" />
-</a>
-
+        <a href="/"><Home className="h-6 w-6" /> </a>
          <a href="/">BIMS</a>
         </div>
       </div>
