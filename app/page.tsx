@@ -6,9 +6,8 @@ import Link from "next/link"
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="mx-auto flex min-h-screen flex-col">
       <MainNav />
-
       {/* Hero Section */}
       <section className="relative">
         <div className="container flex flex-col items-center gap-4 py-24 text-center md:py-32">
