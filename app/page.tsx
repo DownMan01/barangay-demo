@@ -47,8 +47,8 @@ export default function HomePage() {
       </section>
 
       {/* Statistics Section */}
-      <section className="mx-auto border-t bg-muted/50">
-        <div className="container py-16 md:py-24">
+      <section className="border-t bg-muted/50">
+        <div className="container mx-auto py-16 md:py-24">
           <h2 className="mb-12 text-center text-3xl font-bold">Trusted by Barangays</h2>
           <div className="grid gap-8 md:grid-cols-4">
             {stats.map((stat, index) => (
@@ -79,7 +79,7 @@ export default function HomePage() {
 
       {/* CTA Section */}
       <section className="mx-auto border-t bg-muted/50">
-        <div className="container py-16 md:py-24">
+        <div className="container mx-auto py-16 md:py-24">
           <div className="flex flex-col items-center gap-6 text-center">
             <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
             <p className="max-w-[600px] text-muted-foreground">
