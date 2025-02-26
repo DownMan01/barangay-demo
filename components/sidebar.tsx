@@ -34,7 +34,7 @@ export function Sidebar() {
       <div className="p-6">
         <div className="flex items-center gap-2 font-semibold">
           <Home className="h-6 w-6" />
-          <a> href="/favicon" BIMS</a>
+          <a> href="/favicon.png" BIMS</a>
         </div>
       </div>
       <nav className="flex-1 space-y-1 p-4">
