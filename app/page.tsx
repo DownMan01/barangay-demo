@@ -78,7 +78,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="mx-auto border-t bg-muted/50">
+      <section className="border-t bg-muted/50">
         <div className="container mx-auto py-16 md:py-24">
           <div className="flex flex-col items-center gap-6 text-center">
             <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
