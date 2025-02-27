@@ -14,10 +14,9 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { Building2, Users, FileText, MessageSquare, AlertTriangle, HelpCircle, BookOpen, Phone } from "lucide-react"
+import { Building2, Users, FileText, MessageSquare, AlertTriangle, HelpCircle, BookOpen, Phone, X } from "lucide-react"
 import { useState } from "react"
 import { Menu } from "lucide-react" 
-
 
 const features = [
   {
@@ -67,164 +66,190 @@ const resources = [
   },
 ]
 
+const navConfig = [
+  { title: "Home", href: "/" },
+  { 
+    title: "Features", 
+    href: "/features",
+    subItems: features,
+  },
+  { 
+    title: "Resources", 
+    href: "/resources",
+    subItems: resources,
+  },
+  { title: "Demo", href: "/demo" },
+  { title: "Dashboard (demo)", href: "/dashboard" },
+];
+
 export function MainNav() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+
+  const toggleSubmenu = (title: string) => {
+    setOpenSubmenu(openSubmenu === title ? null : title);
+  };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white">
-  <div className="container mx-auto flex h-16 items-center justify-between">
-    {/* Logo Section */}
-    <Link href="/" className="flex items-center gap-2 transition-colors hover:opacity-80">
-      <Building2 href="/" className="h-6 w-6 text-primary" />
-      <div className="hidden md:block">
-        <span className="text-lg font-bold block leading-none">BIMS</span>
-        <span className="text-[0.65rem] text-muted-foreground">Barangay Management</span>
-      </div>
-    </Link>
+    <header className="sticky top-0 z-50 w-full border-b bg-background">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+        {/* Logo Section */}
+        <Link href="/" className="flex items-center gap-2 transition-colors hover:opacity-80">
+          <Building2 className="h-6 w-6 text-primary" />
+          <div className="hidden md:block">
+            <span className="text-lg font-bold block leading-none">BIMS</span>
+            <span className="text-[0.65rem] text-muted-foreground">Barangay Management</span>
+          </div>
+        </Link>
 
-    {/* Center Navigation */}
-    <NavigationMenu className="hidden md:flex flex-grow justify-center">
-      <NavigationMenuList className="gap-2">
-        <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink
-              className={cn(
-                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
-                pathname === "/" ? "text-primary" : "text-muted-foreground",
-              )}
-            >
-              Home
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden md:flex flex-grow justify-center">
+          <NavigationMenuList className="gap-2">
+            {navConfig.map((item) => (
+              <NavigationMenuItem key={item.title}>
+                {item.subItems ? (
+                  <>
+                    <NavigationMenuTrigger
+                      className={cn(
+                        "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary",
+                        pathname.startsWith(item.href) ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
+                      {item.title}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                        {item.subItems.map((subItem) => (
+                          <ListItem
+                            key={subItem.title}
+                            title={subItem.title}
+                            href={subItem.href}
+                            className={pathname === subItem.href ? "text-primary" : ""}
+                          >
+                            <div className="flex items-center gap-2">
+                              <subItem.icon className="h-4 w-4" />
+                              <span>{subItem.description}</span>
+                            </div>
+                          </ListItem>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </>
+                ) : (
+                  <Link href={item.href} legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={cn(
+                        "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary",
+                        pathname === item.href ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
+                      {item.title}
+                    </NavigationMenuLink>
+                  </Link>
+                )}
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
 
-        <NavigationMenuItem>
-          <NavigationMenuTrigger
-            className={cn(
-              "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-              pathname.includes("/features") ? "text-primary" : "text-muted-foreground",
-            )}
+        {/* Desktop Right Section */}
+        <div className="hidden md:flex items-center gap-4">
+          <ModeToggle />
+          <Button variant="ghost" className="text-sm font-medium text-muted-foreground hover:text-primary" asChild>
+            <Link href="/login">Sign in</Link>
+          </Button>
+          <Button className="text-sm" asChild>
+            <Link href="/register">Get Started</Link>
+          </Button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center gap-4">
+          <ModeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
           >
-            Features
-          </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {features.map((feature) => (
-                <ListItem
-                  key={feature.title}
-                  title={feature.title}
-                  href={feature.href}
-                  className={pathname === feature.href ? "text-primary" : ""}
-                >
-                  <div className="flex items-center gap-2">
-                    <feature.icon className="h-4 w-4" />
-                    <span>{feature.description}</span>
-                  </div>
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuTrigger
-            className={cn(
-              "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-              pathname.includes("/resources") ? "text-primary" : "text-muted-foreground",
-            )}
-          >
-            Resources
-          </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {resources.map((resource) => (
-                <ListItem
-                  key={resource.title}
-                  title={resource.title}
-                  href={resource.href}
-                  className={pathname === resource.href ? "text-primary" : ""}
-                >
-                  <div className="flex items-center gap-2">
-                    <resource.icon className="h-4 w-4" />
-                    <span>{resource.description}</span>
-                  </div>
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link href="/demo" legacyBehavior passHref>
-            <NavigationMenuLink
-              className={cn(
-                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
-                pathname === "/demo" ? "text-primary" : "text-muted-foreground",
-              )}
-            >
-              Demo
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link href="/dashboard" legacyBehavior passHref>
-            <NavigationMenuLink
-              className={cn(
-                "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
-                pathname === "/dashboard" ? "text-primary" : "text-muted-foreground",
-              )}
-            >
-              Dashboard(demo)
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
-
-    {/* Right Section */}
-    <div className="flex items-center gap-4">
-      <ModeToggle />
-      <div className="hidden md:flex items-center gap-4">
-        <Button variant="ghost" className="text-sm font-medium text-muted-foreground hover:text-primary" asChild>
-          <Link href="/login">Sign in</Link>
-        </Button>
-        <Button className="text-sm" asChild>
-          <Link href="/register">Get Started</Link>
-        </Button>
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
       </div>
-    </div>
 
-    {/* Mobile Menu Button */}
-    <div className="md:hidden">
-      <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
-        <Menu className="h-6 w-6" />
-      </Button>
-    </div>
-  </div>
-
-  {/* Mobile Navigation Indicator */}
-  <div className="h-0.5 bg-primary/5 md:hidden">
-    <div
-      className="h-full w-1/4 bg-primary transition-transform duration-300"
-      style={{
-        transform: `translateX(${
-          pathname === "/"
-            ? "0%"
-            : pathname.startsWith("/features")
-              ? "100%"
-              : pathname.startsWith("/resources")
-                ? "200%"
-                : pathname.startsWith("/demo")
-                  ? "300%"
-                  : "0%"
-        })`,
-      }}
-    />
-  </div>
-</header>
-
+      {/* Mobile Navigation */}
+      <div className={`md:hidden absolute w-full bg-background border-t ${isOpen ? 'block' : 'hidden'}`}>
+        <div className="container mx-auto px-4 py-4 space-y-2">
+          {navConfig.map((item) => (
+            <div key={item.title} className="space-y-2">
+              {item.subItems ? (
+                <>
+                  <button
+                    onClick={() => toggleSubmenu(item.title)}
+                    className={cn(
+                      "w-full flex justify-between items-center py-2 px-3 rounded-md",
+                      pathname.startsWith(item.href) ? "text-primary bg-accent" : "text-foreground hover:bg-accent"
+                    )}
+                  >
+                    <span>{item.title}</span>
+                    <span className={cn(
+                      "transform transition-transform",
+                      openSubmenu === item.title ? "rotate-180" : ""
+                    )}>
+                      ▼
+                    </span>
+                  </button>
+                  {openSubmenu === item.title && (
+                    <div className="ml-4 space-y-1">
+                      {item.subItems.map((subItem) => (
+                        <Link
+                          key={subItem.title}
+                          href={subItem.href}
+                          onClick={() => setIsOpen(false)}
+                          className={cn(
+                            "flex items-center gap-2 py-2 px-3 rounded-md text-sm",
+                            pathname === subItem.href ? "text-primary bg-accent" : "text-foreground hover:bg-accent"
+                          )}
+                        >
+                          <subItem.icon className="h-4 w-4" />
+                          {subItem.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "block py-2 px-3 rounded-md",
+                    pathname === item.href ? "text-primary bg-accent" : "text-foreground hover:bg-accent"
+                  )}
+                >
+                  {item.title}
+                </Link>
+              )}
+            </div>
+          ))}
+          
+          {/* Mobile Auth Buttons */}
+          <div className="pt-4 space-y-2">
+            <Button variant="outline" className="w-full" asChild>
+              <Link href="/login" onClick={() => setIsOpen(false)}>
+                Sign In
+              </Link>
+            </Button>
+            <Button className="w-full" asChild>
+              <Link href="/register" onClick={() => setIsOpen(false)}>
+                Get Started
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </header>
   )
 }
 
@@ -237,16 +262,18 @@ const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWit
             ref={ref}
             className={cn(
               "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-              className,
+              className
             )}
             {...props}
           >
             <div className="text-sm font-medium leading-none">{title}</div>
-            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
+            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+              {children}
+            </p>
           </a>
         </NavigationMenuLink>
       </li>
     )
-  },
+  }
 )
 ListItem.displayName = "ListItem"
